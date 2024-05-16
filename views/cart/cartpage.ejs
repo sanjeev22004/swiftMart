@@ -1,0 +1,108 @@
+<% layout("layout/boilerplate") -%>
+
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-8">
+                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="p-5">
+                            <h1 class="fw-bold mb-5 text-black">Shopping Cart</h1>
+
+                            <% if (cart.length > 0) { %>
+                                <% for(let product of cart) { %>
+                                    <div class="row mb-4 d-flex align-items-center" id="product_<%= product.id %>">
+                                        <div class="col-md-3 col-lg-2 col-xl-2">
+                                            <img src="<%= product.img %>" class="img-fluid" alt="<%= product.name %>">
+                                        </div>
+                                        <div class="col-md-5 col-lg-6 col-xl-6">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h6 class="text-black mb-0"><%= product.name %></h6>
+                                                </div>
+                                                <div class="col-12">
+                                                    <p>Quantity: <span id="quantity_<%= product.id %>"><%= product.count %></span></p>
+                                                </div>
+                                                <div class="col-12">
+                                                    <p>Price: € <span id="price_<%= product.id %>"><%= product.price %></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-lg-4 col-xl-4">
+                                            <button class="btn btn-danger" onclick="removeProduct('<%= product.id %>')">Remove</button>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% } else { %>
+                                <div class="text-center">
+                                    <p>Your cart is empty. <a href="#!" class="text-body">Start shopping now!</a></p>
+                                </div>
+                            <% } %>
+
+                            <div class="pt-5">
+                                <h6 class="mb-0"><a href="#!" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 bg-grey">
+                <div class="p-5">
+                    <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+
+                    <div class="d-flex justify-content-between mb-5">
+                        <h5 class="text-uppercase">Total price</h5>
+                        <h5 id="totalAmount">€ <%= totalAmount %></h5>
+                    </div>
+
+                    <button type="button" class="btn btn-dark btn-block btn-lg">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    async function removeProduct(productId) {
+        const userId = "<%= userId %>";
+
+        try {
+            const response = await fetch('/product/user/cart/remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId, productId })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+               
+                document.getElementById(`product_${productId}`).remove();
+                
+                
+                updateTotalAmount();
+            } else {
+                console.error('Failed to remove product');
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    }
+
+    function updateTotalAmount() {
+        let total = 0;
+        const productPrices = document.querySelectorAll('[id^="price_"]');
+
+        productPrices.forEach(priceElement => {
+            const productId = priceElement.id.split('_')[1];
+            const quantity = parseInt(document.getElementById(`quantity_${productId}`).innerText, 10);
+            const price = parseFloat(priceElement.innerText);
+            total += quantity * price;
+        });
+
+        document.getElementById('totalAmount').innerText = `€ ${total.toFixed(2)}`;
+    }
+</script>

@@ -17,7 +17,7 @@ const sessionConfig = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: false // Set to true if using HTTPS
+        secure: false
     }
 };
 
@@ -33,8 +33,8 @@ app.use(flash());
 app.use(passport.authenticate('session'));
 
 // Passport Configuration
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -44,17 +44,22 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.newUser=req.user;
+    res.locals.currentuser=req.user;
     next();
 });
 
 // Routes
+app.get("/",(req,res)=>{
+    res.render("../views/home")
+})
 const productRoutes = require("./routes/productRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const authRoutes = require("./routes/authRoutes");
+const cartRoutes=require("./routes/cartRoutes");
 app.use(productRoutes);
 app.use(reviewRoutes);
 app.use(authRoutes);
+app.use(cartRoutes);
 
 // MongoDB Connection
 mongoose.connect("mongodb://127.0.0.1:27017/ecom")

@@ -1,24 +1,23 @@
 <% layout("layout/boilerplate") -%>
 
-
 <div class="container mt-5">
     <h1>Edit Product</h1>
     <form action="/products/<%= product._id %>?_method=PATCH" method="POST">
         <div class="mb-3">
             <label for="productName" class="form-label">Product Name</label>
-            <input type="text" class="form-control" id="productName" name="productName" required value="<%= product.name %>"  >
+            <input type="text" class="form-control" id="productName" name="productName" required value="<%= product.name %>" >
         </div>
         <div class="mb-3">
             <label for="productPrice" class="form-label">Price</label>
-            <input type="number" class="form-control" id="productPrice" name="productPrice" required  value="<%= product.price %>">
+            <input type="number" class="form-control" id="productPrice" name="productPrice" required value="<%= product.price %>">
         </div>
         <div class="mb-3">
             <label for="productImage" class="form-label">Image URL</label>
-            <input type="url" class="form-control" id="productImage" name="productImage" required   value="<%= product.img%>" >
+            <input type="url" class="form-control" id="productImage" name="productImage" required value="<%= product.img%>">
         </div>
         <div class="mb-3">
             <label for="productDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="productDescription" name="productDescription" rows="3" required>  <%= product.desc%> </textarea>
+            <textarea class="form-control" id="productDescription" name="productDescription" rows="3" required><%= product.desc%></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

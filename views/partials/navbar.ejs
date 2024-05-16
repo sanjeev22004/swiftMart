@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/" style="font-weight: bold;">swiftMart</a>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/products">Products</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="/products/new">Add Product</a>
+          </li>
+      </ul>
+      
+      <ul class="navbar-nav">
+          <% if(currentuser) { %>
+              <li class="nav-item">
+                  <a href="/product/user/cart" class="nav-link">
+                      <i class="fas fa-shopping-cart"></i>
+                      <sup><span class="badge bg-secondary"><%= currentuser.cart.length %></span></sup>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <span class="nav-link" style="font-style: italic;">Welcome <%= currentuser.username %></span>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/logout">Logout</a>
+              </li>
+          <% } else { %>
+              <li class="nav-item">
+                  <a class="nav-link" href="/login">Login</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/register">Register</a>
+              </li>
+          <% } %>
+      </ul>
+  </div>
+</nav>

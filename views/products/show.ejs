@@ -1,43 +1,62 @@
 <% layout("layout/boilerplate") -%>
 
-
 <div class="container mt-5">
     <div class="row">
-        <!-- Left Part: Product Details -->
+        <!-- Left Part: Product Details and Reviews -->
         <div class="col-lg-6">
             <div class="card">
-                <h5>where is image</h5>
+                <h5>Product Image</h5>
                 <img src="<%= productInfo.img %>" class="card-img-top" alt="Product Image">
                 <div class="card-body">
                     <h5 class="card-title"><%= productInfo.name %></h5>
                     <p class="card-text">Price: $<%= productInfo.price %></p>
                     <p class="card-text"><%= productInfo.desc %></p>
-                    <a href="/products/<%= productInfo.id %>/edit">edit</a>
-                    <form method="post" action="/products/<%= productInfo.id %>?_method=DELETE">
-                        <button type="submit">Delete</button>
-                    </form>
-                    
-                    <!-- Add more product details as needed -->
+                    <div class="button-group">
+                        <a href="/products/<%= productInfo.id %>/edit" class="btn btn-primary">Edit</a>
+                        <form method="post" action="/products/<%= productInfo.id %>?_method=DELETE" style="display: inline-block;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <form method="post" action="/products/<%= productInfo.id %>/cart" style="display: inline-block;">
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form>
+                    </div>
                 </div>
+            </div>
+            
+            <!-- Product Reviews Section -->
+            <div class="mt-5">
+                <h2>Product Reviews</h2>
+                <% for(let review of productInfo.reviews) { %>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Rating: <%= review.rating %> stars</h6>
+                            <p class="card-text"><%= review.comment %></p>
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
 
-        <!-- Right Part: Review and Comment Section -->
+        <!-- Right Part: Review Form -->
         <div class="col-lg-6">
-            <h2>Product Reviews</h2>
+            <h2>Leave a Review</h2>
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Leave a Review</h5>
                     <form id="reviewForm" action="/products/<%= productInfo._id %>/review" method="POST">
                         <div class="form-group">
-                            <label for="rating">Rating:</label>
-                            <select class="form-control" id="rating" name="rating">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                            </select>
+                            <label for="rating">Rating:</label><br>
+                            <div class="rating">
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5" title="5 stars">5 stars</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4" title="4 stars">4 stars</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3" title="3 stars">3 stars</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2" title="2 stars">2 stars</label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1" title="1 star">1 star</label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="comment">Comment:</label>
@@ -45,24 +64,14 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-                    <div class="mb-3">
-
-                        <% for(let review of productInfo.reviews) {  %>
-                            console.log( "<%= review.comment %>");
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h6 class="card-subtitle mb-2 text-muted">Rating: <%= review.rating %></h6>
-                                    <p class="card-text"><%= review.comment %></p>
-                                </div>
-                            </div>
-                        <% } %>
-
-                    </div>
-
                 </div>
             </div>
-            <!-- Add more reviews and comments as needed -->
         </div>
-        
     </div>
 </div>
+
+<style>
+    .button-group {
+        margin-top: 10px;
+    }
+</style>
