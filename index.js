@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require("path");
@@ -10,6 +11,7 @@ const session = require("express-session");
 const LocalStrategy = require("passport-local");
 const passport = require("passport");
 const User = require("./models/user");
+const seedProduct = require("./seed");
 
 // Session Configuration
 const sessionConfig = {
@@ -44,27 +46,38 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currentuser=req.user;
+    res.locals.currentuser = req.user;
     next();
 });
 
+// MongoDB Connection
+const dbURL = process.env.dbURL;
+
+if (!dbURL) {
+    console.error('MongoDB URI is not set in environment variables');
+    process.exit(1);
+}
+
+mongoose.connect(dbURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log("Connected to MongoDB".blue);
+    seedProduct();  // Seed products after connection
+}).catch((err) => console.error(err));
+
 // Routes
-app.get("/",(req,res)=>{
-    res.render("../views/home")
-})
+app.get("/", (req, res) => {
+    res.render("../views/home");
+});
 const productRoutes = require("./routes/productRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const authRoutes = require("./routes/authRoutes");
-const cartRoutes=require("./routes/cartRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 app.use(productRoutes);
 app.use(reviewRoutes);
 app.use(authRoutes);
 app.use(cartRoutes);
-
-// MongoDB Connection
-mongoose.connect("mongodb://127.0.0.1:27017/ecom")
-    .then(() => console.log("Connected to MongoDB".blue))
-    .catch((err) => console.error(err));
 
 // Server Listening
 const port = process.env.PORT || 3000;
