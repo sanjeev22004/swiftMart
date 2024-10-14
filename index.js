@@ -11,7 +11,6 @@ const session = require("express-session");
 const LocalStrategy = require("passport-local");
 const passport = require("passport");
 const User = require("./models/user");
-const seedProduct = require("./seed");
 
 // Session Configuration
 const sessionConfig = {
@@ -24,6 +23,9 @@ const sessionConfig = {
 };
 
 // Middleware
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(bodyParser.json({ limit: '10mb' }));
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -63,7 +65,7 @@ mongoose.connect(dbURL, {
     useUnifiedTopology: true,
 }).then(() => {
     console.log("Connected to MongoDB".blue);
-    seedProduct();  // Seed products after connection
+      // Seed products after connection
 }).catch((err) => console.error(err));
 
 // Routes
@@ -74,6 +76,9 @@ const productRoutes = require("./routes/productRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const authRoutes = require("./routes/authRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const paymentRoute = require('./routes/paymentRoute');
+
+app.use(paymentRoute);
 app.use(productRoutes);
 app.use(reviewRoutes);
 app.use(authRoutes);

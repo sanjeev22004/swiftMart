@@ -1,108 +1,202 @@
-<% layout("layout/boilerplate") -%>
-
-<section class="h-100 h-custom" style="background-color: #d2c9ff;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-lg-8">
-                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                    <div class="card-body p-0">
-                        <div class="p-5">
-                            <h1 class="fw-bold mb-5 text-black">Shopping Cart</h1>
-
-                            <% if (cart.length > 0) { %>
-                                <% for(let product of cart) { %>
-                                    <div class="row mb-4 d-flex align-items-center" id="product_<%= product.id %>">
-                                        <div class="col-md-3 col-lg-2 col-xl-2">
-                                            <img src="<%= product.img %>" class="img-fluid" alt="<%= product.name %>">
-                                        </div>
-                                        <div class="col-md-5 col-lg-6 col-xl-6">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <h6 class="text-black mb-0"><%= product.name %></h6>
-                                                </div>
-                                                <div class="col-12">
-                                                    <p>Quantity: <span id="quantity_<%= product.id %>"><%= product.count %></span></p>
-                                                </div>
-                                                <div class="col-12">
-                                                    <p>Price: € <span id="price_<%= product.id %>"><%= product.price %></span></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZv0ZTH0aT6yR3U1GfzW9kkl8xAC3z2jQz6B+f5BRmSDoUgDqgDkvOWQkPGxIhS" crossorigin="anonymous">
+    <style>
+        body { background-color: #e7e7e7; }
+        .card-registration { border-radius: 15px; }
+        .btn-danger { transition: background-color 0.3s; }
+        .btn-danger:hover { background-color: #ff4d4d; }
+        .btn-primary { transition: transform 0.1s, background-color 0.3s; }
+        .btn-primary:hover { background-color: #28a745; transform: translateY(-2px); }
+        .btn-primary:active { transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <%- include("../partials/navbar") %>
+    <%- include("../partials/flash") %>
+    <section class="h-100 h-custom"> 
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8">
+                    <div class="card card-registration">
+                        <div class="card-body p-0">
+                            <div class="p-5">
+                                <h1 class="fw-bold mb-5 text-black">Shopping Cart</h1>
+                                <% if (cart.length > 0) { %>
+                                    <% for(let product of cart) { %>
+                                        <div class="row mb-4 d-flex align-items-center" id="product_<%= product.id %>">
+                                            <div class="col-md-3 col-lg-2 col-xl-2">
+                                                <img src="data:image/jpeg;base64,<%= product.img %>" class="img-fluid" alt="<%= product.name %>">
+                                            </div>
+                                            <div class="col-md-5 col-lg-6 col-xl-6">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <h6 class="text-black mb-0"><%= product.name %></h6>
+                                                    </div>
+                                                    <div class="col-12 d-flex align-items-center">
+                                                        <button class="btn btn-outline-secondary btn-sm me-2" onclick="decrementQuantity('<%= product.id %>')">-</button>
+                                                        <p class="mb-0">Quantity: <span id="quantity_<%= product.id %>"><%= product.count %></span></p>
+                                                        <button class="btn btn-outline-secondary btn-sm ms-2" onclick="incrementQuantity('<%= product.id %>')">+</button>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <p>Price: Rs <span id="price_<%= product.id %>"><%= product.price %></span></p>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4 col-lg-4 col-xl-4">
+                                                <button class="btn btn-danger" onclick="removeProduct('<%= product.id %>')">Remove</button>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4 col-lg-4 col-xl-4">
-                                            <button class="btn btn-danger" onclick="removeProduct('<%= product.id %>')">Remove</button>
-                                        </div>
-                                    </div>
+                                    <% } %>
+                                <% } else { %>
+                                    <div class="text-center"><p>Your cart is empty.</p></div>
                                 <% } %>
-                            <% } else { %>
-                                <div class="text-center">
-                                    <p>Your cart is empty. <a href="#!" class="text-body">Start shopping now!</a></p>
+                                <div class="pt-5">
+                                    <h6 class="mb-0"><a href="#!" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
                                 </div>
-                            <% } %>
-
-                            <div class="pt-5">
-                                <h6 class="mb-0"><a href="#!" class="text-body"><i class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-lg-4 bg-grey">
-                <div class="p-5">
-                    <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
-
-                    <div class="d-flex justify-content-between mb-5">
-                        <h5 class="text-uppercase">Total price</h5>
-                        <h5 id="totalAmount">€ <%= totalAmount %></h5>
+                <div class="col-lg-4 bg-grey" style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 5%;">
+                    <div class="p-5">
+                        <h3 class="fw-bold mb-5 mt-2 pt-1" style="color: #080909;">Summary</h3>
+                        <div class="d-flex justify-content-between mb-5">
+                            <h5 class="text-uppercase" style="color: #333;">Total price</h5>
+                            <h5 id="totalAmount" style="color: #2874f0;">Rs <%= totalAmount %></h5>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-block btn-lg" onclick="checkout()" style="background-color: #28a745; border-color: #28a745;">Checkout</button>
                     </div>
-
-                    <button type="button" class="btn btn-dark btn-block btn-lg">Checkout</button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<script>
-    async function removeProduct(productId) {
-        const userId = "<%= userId %>";
-
-        try {
-            const response = await fetch('/product/user/cart/remove', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId, productId })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-               
-                document.getElementById(`product_${productId}`).remove();
-                
-                
-                updateTotalAmount();
-            } else {
-                console.error('Failed to remove product');
+    </section>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        async function removeProduct(productId) {
+            const userId = "<%= userId %>";
+            try {
+                const response = await fetch('/product/user/cart/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, productId })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById(`product_${productId}`).remove();
+                    updateTotalAmount();
+                } else {
+                    console.error('Failed to remove product');
+                }
+            } catch (error) {
+                console.error('Error deleting product:', error);
             }
-        } catch (error) {
-            console.error('Error deleting product:', error);
         }
-    }
-
-    function updateTotalAmount() {
-        let total = 0;
-        const productPrices = document.querySelectorAll('[id^="price_"]');
-
-        productPrices.forEach(priceElement => {
-            const productId = priceElement.id.split('_')[1];
-            const quantity = parseInt(document.getElementById(`quantity_${productId}`).innerText, 10);
-            const price = parseFloat(priceElement.innerText);
-            total += quantity * price;
-        });
-
-        document.getElementById('totalAmount').innerText = `€ ${total.toFixed(2)}`;
-    }
-</script>
+        async function incrementQuantity(productId) {
+            const userId = "<%= userId %>";
+            const quantityElement = document.getElementById(`quantity_${productId}`);
+            let currentQuantity = parseInt(quantityElement.innerText, 10);
+            try {
+                const response = await fetch('/product/user/cart/increment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, productId })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    currentQuantity += 1;
+                    quantityElement.innerText = currentQuantity;
+                    updateTotalAmount();
+                } else {
+                    console.error('Failed to increment quantity');
+                }
+            } catch (error) {
+                console.error('Error incrementing quantity:', error);
+            }
+        }
+        async function decrementQuantity(productId) {
+            const userId = "<%= userId %>";
+            const quantityElement = document.getElementById(`quantity_${productId}`);
+            let currentQuantity = parseInt(quantityElement.innerText, 10);
+            if (currentQuantity > 1) {
+                try {
+                    const response = await fetch('/product/user/cart/decrement', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId, productId })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        currentQuantity -= 1;
+                        quantityElement.innerText = currentQuantity;
+                        updateTotalAmount();
+                    } else {
+                        console.error('Failed to decrement quantity');
+                    }
+                } catch (error) {
+                    console.error('Error decrementing quantity:', error);
+                }
+            } else {
+                removeProduct(productId);
+            }
+        }
+        function updateTotalAmount() {
+            let total = 0;
+            const productPrices = document.querySelectorAll('[id^="price_"]');
+            productPrices.forEach(priceElement => {
+                const productId = priceElement.id.split('_')[1];
+                const quantity = parseInt(document.getElementById(`quantity_${productId}`).innerText, 10);
+                const price = parseFloat(priceElement.innerText);
+                total += quantity * price;
+            });
+            document.getElementById('totalAmount').innerText = ` Rs ${total.toFixed(2)}`;
+        }
+        async function checkout() {
+            const amount = document.getElementById('totalAmount').innerText.split(' ')[1] * 100;
+            const response = await fetch('/createOrder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount })
+            });
+            const orderData = await response.json();
+            if (orderData.success) {
+                const options = {
+                    key: "<%= process.env.RAZORPAY_KEY_ID %>",
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: "test",
+                    description: 'Test Transaction',
+                    order_id: orderData.orderId,
+                    handler: async function (response) {
+                        const paymentData = {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        };
+                        await fetch('/verifyPayment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(paymentData)
+                        });
+                        location.reload();
+                    },
+                    prefill: {
+                        name: 'Your Name',
+                        email: 'you@example.com',
+                        contact: '9999999999'
+                    },
+                    theme: {
+                        color: '#F37254'
+                    }
+                };
+                const razorpay = new Razorpay(options);
+                razorpay.open();
+            }
+        }
+    </script>
+</body>
+</html>

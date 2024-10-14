@@ -10,7 +10,7 @@ const userSchema=new mongoose.Schema({
         {
             name:String,
             price:Number,
-            img:String,
+            img:Buffer,
             id:mongoose.Schema.Types.ObjectId,
             count:{
                 type:Number,

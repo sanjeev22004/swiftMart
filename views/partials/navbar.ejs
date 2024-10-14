@@ -1,41 +1,53 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/" style="font-weight: bold;">swiftMart</a>
+<nav class="navbar navbar-expand-lg" style="padding: 15px; background-color: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <a class="navbar-brand" href="/" style="font-weight: bold; color: #2874f0; font-size: 1.5rem; letter-spacing: 1px; transition: color 0.3s ease;">
+        swiftMart
+    </a>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/products">Products</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/products/new">Add Product</a>
-          </li>
-      </ul>
-      
-      <ul class="navbar-nav">
-          <% if(currentuser) { %>
-              <li class="nav-item">
-                  <a href="/product/user/cart" class="nav-link">
-                      <i class="fas fa-shopping-cart"></i>
-                      <sup><span class="badge bg-secondary"><%= currentuser.cart.length %></span></sup>
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <span class="nav-link" style="font-style: italic;">Welcome <%= currentuser.username %></span>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/logout">Logout</a>
-              </li>
-          <% } else { %>
-              <li class="nav-item">
-                  <a class="nav-link" href="/login">Login</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/register">Register</a>
-              </li>
-          <% } %>
-      </ul>
-  </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="border: none; outline: none;">
+        <span class="navbar-toggler-icon" style="color: #2874f0;"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/" style="color: #555; padding: 10px 15px; transition: color 0.3s ease;">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products" style="color: #555; padding: 10px 15px; transition: color 0.3s ease;">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products/new" style="color: #555; padding: 10px 15px; transition: color 0.3s ease;">Add Product</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav">
+            <% if(currentuser) { %>
+                <li class="nav-item">
+                    <a href="/product/user/cart" class="nav-link" style="color: #2874f0; position: relative;">
+                        <i class="fas fa-shopping-cart" style="font-size: 1.2rem;"></i>
+                        <sup>
+                            <span class="badge" style="position: absolute; top: -5px; right: -10px; background-color: #ff4081; color: white; font-size: 0.8rem;">
+                                <%= currentuser.cart.length %>
+                            </span>
+                        </sup>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link" style="font-style: italic; color: #555; font-size: 1.1rem;">
+                        Welcome, <%= currentuser.username %>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout" style="color: #555; padding: 10px 15px; transition: color 0.3s ease;">Logout</a>
+                </li>
+            <% } else { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login" style="color: #555; padding: 10px 15px; transition: color 0.3s ease;">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register" style="color: #555; padding: 10px 15px; transition: color 0.3s ease;">Register</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
 </nav>
