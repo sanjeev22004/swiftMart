@@ -12,15 +12,26 @@ const LocalStrategy = require("passport-local");
 const passport = require("passport");
 const User = require("./models/user");
 
-// Session Configuration
-const sessionConfig = {
-    secret: 'keyword',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: false
-    }
-};
+// MongoDB Connection
+const dbURL = process.env.dbURL || 'mongodb://localhost:27017/yourDatabase';
+
+mongoose.connect(dbURL)
+  .then(() => console.log('MongoDB connected successfully'.green))
+  .catch(err => console.error('MongoDB connection error:'.red, err));
+
+// Session configuration
+const MongoStore = require('connect-mongo');
+
+app.use(session({
+  secret: 'keyword',
+  resave: false,
+  saveUninitialized: false, 
+  store: MongoStore.create({ mongoUrl: dbURL }),  // Use dbURL here
+  cookie: {
+    secure: false,  // Set to true in production with HTTPS
+    maxAge: 1000 * 60 * 60 * 24,  // 1 day expiry
+  }
+}));
 
 // Middleware
 const bodyParser = require('body-parser');
@@ -32,7 +43,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.json());
-app.use(session(sessionConfig));
 app.use(flash());
 app.use(passport.authenticate('session'));
 
@@ -51,22 +61,6 @@ app.use((req, res, next) => {
     res.locals.currentuser = req.user;
     next();
 });
-
-// MongoDB Connection
-const dbURL = process.env.dbURL;
-
-if (!dbURL) {
-    console.error('MongoDB URI is not set in environment variables');
-    process.exit(1);
-}
-
-mongoose.connect(dbURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    console.log("Connected to MongoDB".blue);
-      // Seed products after connection
-}).catch((err) => console.error(err));
 
 // Routes
 app.get("/", (req, res) => {
