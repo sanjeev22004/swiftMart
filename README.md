@@ -1,3 +1,21 @@
+SwiftMart
+
+SwiftMart is an e-commerce platform that offers a seamless shopping experience, featuring secure browsing, purchasing, and product management.
+
+Features:
+
+RESTful API built with Express.js for CRUD operations on MongoDB.
+User authentication and role-based authorization using Passport.js.
+Razorpay payment gateway integration for secure transactions.
+
+TO RUN THE PROJECT:
+1.Clone the repository.
+2.Install dependencies.
+3.Start the server: npm start.
+
+
+
+
 ![Screenshot (323)](https://github.com/user-attachments/assets/5491d7bc-0aab-44d1-a74f-2083b020d8d6)
 
 ![Screenshot (324)](https://github.com/user-attachments/assets/9aaa62e9-2efb-4bc9-80bb-160f90d24de7)
